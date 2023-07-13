@@ -4,6 +4,7 @@ use std::time::Duration;
 use tokio::time;
 
 #[derive(Debug, Deserialize)]
+#[allow(non_snake_case)]
 struct Match {
     eventId: String,
     homeTeam: String,
