@@ -33,10 +33,9 @@ async fn fetch_json() -> Result<(), Error> {
 
     let matches: serde_json::Value = response.json().await.unwrap();
 
-    for soccer_match in matches.as_object().unwrap() {
-        for match_value in soccer_match {
-            println!("{:?}", match_value);
-        }
+    for soccer_match_value in matches.as_object().unwrap() {
+        let soccer_match: serde_json::Value = soccer_match_value.json().await.unwrap();
+        println!("{:?}\n", soccer_match.score);
     }
 
     Ok(())
