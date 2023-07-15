@@ -27,7 +27,6 @@ async fn main() -> Result<(), Error> {
 }
 
 async fn fetch_json() -> Result<(), Error> {
-
     let url = "http://106.52.68.20/b365/soccer/test/allEv?lang=en"; // Updated API endpoint
     let response = reqwest::get(url).await?;
 
@@ -36,7 +35,8 @@ async fn fetch_json() -> Result<(), Error> {
     for (_, soccer_match_value) in matches.as_object().unwrap() {
         /* let soccer_match: serde_json::Value = soccer_match_value.json(); */
         let score = soccer_match_value["score"].to_string().split("-");
-        println!("{} - {}\n", &score[0], &score[1]);
+
+        println!("{:?}\n", score);
     }
 
     Ok(())
