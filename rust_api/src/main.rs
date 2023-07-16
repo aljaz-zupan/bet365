@@ -21,6 +21,7 @@ struct Match {
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     loop {
+        println!("");
         fetch_json().await?; // Fetch JSON request
         time::sleep(Duration::from_secs(60)).await; // Wait for 1 minute
     }
@@ -34,9 +35,13 @@ async fn fetch_json() -> Result<(), Error> {
 
     for (_, soccer_match_value) in matches.as_object().unwrap() {
         /* let soccer_match: serde_json::Value = soccer_match_value.json(); */
-        let score = soccer_match_value["score"].to_string().split("-");
+        let score: Vec<String> = soccer_match_value["score"]
+            .to_string()
+            .split("-")
+            .map(|s| s.trim().to_owned())
+            .collect();
 
-        println!("{:?}\n", score);
+        println!("{} {}", score[0], score[1])
     }
 
     Ok(())
