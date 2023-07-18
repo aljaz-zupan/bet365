@@ -1,3 +1,4 @@
+use datetime::LocalDateTime;
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
@@ -21,28 +22,42 @@ struct Match {
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     loop {
-        println!("");
         fetch_json().await?; // Fetch JSON request
-        time::sleep(Duration::from_secs(60)).await; // Wait for 1 minute
+        time::sleep(Duration::from_secs(70)).await; // Wait for 1 minute
     }
 }
 
 async fn fetch_json() -> Result<(), Error> {
     let url = "http://106.52.68.20/b365/soccer/test/allEv?lang=en"; // Updated API endpoint
     let response = reqwest::get(url).await?;
+    let time = LocalDateTime::now();
 
-    let matches: serde_json::Value = response.json().await.unwrap();
+    /* match (response.status()) {
+        reqwest::StatusCode => println!("Sve oke :D"),
+        _ => println!("Nešto nije ok :D, error: {}", response.status()),
+    } */
+
+    println!("time: {:?}, {}", time, response.status());
+
+    /* let matches: serde_json::Value = response.json().await.unwrap();
 
     for (_, soccer_match_value) in matches.as_object().unwrap() {
         /* let soccer_match: serde_json::Value = soccer_match_value.json(); */
         let score: Vec<String> = soccer_match_value["score"]
             .to_string()
-            .split("-")
+            .split('-')
             .map(|s| s.trim().to_owned())
             .collect();
-
-        println!("{} {}", score[0], score[1])
-    }
-
+        let time: Vec<String> = soccer_match_value["restTime"]
+            .to_string()
+            .split(':')
+            .map(|time| time.trim().to_owned())
+            .collect();
+        let minutes = time[0].clone();
+        println!(
+            "result -> {}-{}       time in minutes -> {} ",
+            score[0], score[1], minutes
+        );
+    } */
     Ok(())
 }
