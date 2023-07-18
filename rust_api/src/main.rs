@@ -1,4 +1,4 @@
-use datetime::LocalDateTime;
+use chrono::Local;
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
@@ -27,17 +27,18 @@ async fn main() -> Result<(), Error> {
     }
 }
 
+#[allow(unused)]
 async fn fetch_json() -> Result<(), Error> {
     let url = "http://106.52.68.20/b365/soccer/test/allEv?lang=en"; // Updated API endpoint
     let response = reqwest::get(url).await?;
-    let time = LocalDateTime::now();
+    let time2 = Local::now();
 
     /* match (response.status()) {
         reqwest::StatusCode => println!("Sve oke :D"),
         _ => println!("Nešto nije ok :D, error: {}", response.status()),
     } */
 
-    println!("time: {:?}, {}", time, response.status());
+    println!("time: {:?}, {}", time2, response.status());
 
     /* let matches: serde_json::Value = response.json().await.unwrap();
 
