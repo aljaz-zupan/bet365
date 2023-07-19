@@ -1,5 +1,5 @@
 use chrono::Local;
-use reqwest::Error;
+use reqwest::{Error, Response, StatusCode};
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 use tokio::time;
@@ -27,16 +27,15 @@ async fn main() -> Result<(), Error> {
     }
 }
 
-#[allow(unused)]
 async fn fetch_json() -> Result<(), Error> {
-    let url = "http://106.52.68.20/b365/soccer/test/allEv?lang=en"; // Updated API endpoint
-    let response = reqwest::get(url).await?;
-    let time2 = Local::now();
+    let url: &str = "http://106.52.68.20/b365/soccer/test/allEv?lang=en"; // Updated API endpoint
+    let response: Response = reqwest::get(url).await?;
+    let time2: chrono::DateTime<Local> = Local::now();
 
-    /* match (response.status()) {
-        reqwest::StatusCode => println!("Sve oke :D"),
-        _ => println!("Nešto nije ok :D, error: {}", response.status()),
-    } */
+    match response.status() {
+        StatusCode::OK => get_matches(&response).await?,
+        _ => println!("Nešto nije ok :D, error: {}", &response.status()),
+    }
 
     println!("time: {:?}, {}", time2, response.status());
 
@@ -60,5 +59,10 @@ async fn fetch_json() -> Result<(), Error> {
             score[0], score[1], minutes
         );
     } */
+    Ok(())
+}
+
+async fn get_matches(response: &Response) -> Result<(), Error> {
+    let matches = response.json().await.unwrap();
     Ok(())
 }
