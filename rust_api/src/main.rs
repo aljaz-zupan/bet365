@@ -1,5 +1,5 @@
 /* use chrono::Local; */
-use reqwest::{Error, Response};
+use reqwest::{Error, Response, StatusCode};
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 use tokio::time;
@@ -33,46 +33,52 @@ async fn fetch_json() -> Result<(), Error> {
     let response: Response = reqwest::get(url).await?;
 
     /* let current_time: chrono::DateTime<Local> = Local::now(); */
-    let matches: serde_json::Value = response.json().await.unwrap();
 
-    for (_, soccer_match_value) in matches.as_object().unwrap() {
-        /* let soccer_match: serde_json::Value = soccer_match_value.json(); */
-        let score: Vec<&str> = soccer_match_value["score"]
-            .as_str()
-            .unwrap()
-            .split('-')
-            .map(|s| s.trim())
-            .collect();
-        let time: Vec<String> = soccer_match_value["restTime"]
-            .as_str()
-            .unwrap()
-            .split(':')
-            .map(|time| time.trim().to_owned())
-            .collect();
-        let minutes: i32 = time[0].parse().unwrap();
+    if response.status() == StatusCode::OK {
+        let matches: serde_json::Value = response.json().await.unwrap();
 
-        let num_goals1: i32 = match score[0].to_string().parse() {
-            Ok(num) => num,
-            Err(_) => {
-                eprintln!("Error: Could not parse {} as integer", score[0]);
-                continue; // Skip to the next iteration of the loop
-            }
-        };
+        for (_, soccer_match_value) in matches.as_object().unwrap() {
+            /* let soccer_match: serde_json::Value = soccer_match_value.json(); */
+            let score: Vec<&str> = soccer_match_value["score"]
+                .as_str()
+                .unwrap()
+                .split('-')
+                .map(|s| s.trim())
+                .collect();
+            let time: Vec<String> = soccer_match_value["restTime"]
+                .as_str()
+                .unwrap()
+                .split(':')
+                .map(|time| time.trim().to_owned())
+                .collect();
+            let minutes: i32 = time[0].parse().unwrap();
 
-        let num_goals2: i32 = match score[1].to_string().parse() {
-            Ok(num) => num,
-            Err(_) => {
-                eprintln!("Error: Could not parse {} as integer", score[1]);
-                continue; // Skip to the next iteration of the loop
-            }
-        };
-        let goals_total: i32 = num_goals1 + num_goals2;
-        let match_score = calculate_score(&goals_total, &minutes);
-        println!(
-            "result: {}-{}, total goals: {}, minutes: {}, score: {}",
-            score[0], score[1], goals_total, minutes, match_score
-        );
+            let num_goals1: i32 = match score[0].to_string().parse() {
+                Ok(num) => num,
+                Err(_) => {
+                    eprintln!("Error: Could not parse {} as integer", score[0]);
+                    continue; // Skip to the next iteration of the loop
+                }
+            };
+
+            let num_goals2: i32 = match score[1].to_string().parse() {
+                Ok(num) => num,
+                Err(_) => {
+                    eprintln!("Error: Could not parse {} as integer", score[1]);
+                    continue; // Skip to the next iteration of the loop
+                }
+            };
+            let goals_total: i32 = num_goals1 + num_goals2;
+            let match_score = calculate_score(&goals_total, &minutes);
+            println!(
+                "result: {}-{}, total goals: {}, minutes: {}, score: {}",
+                score[0], score[1], goals_total, minutes, match_score
+            );
+        }
+    } else {
+        println!("There was an error: {}", response.status());
     }
+
     Ok(())
 }
 
