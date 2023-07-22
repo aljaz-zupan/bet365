@@ -75,10 +75,10 @@ async fn fetch_json() -> Result<(), Error> {
                     let goals_total: i32 = num_goals1 + num_goals2;
                     let match_score = calculate_score(&goals_total, &minutes);
 
-                    if match_score >= 0.0 {
-                        format!(
-                            "result: {}-{}, total goals: {}, minutes: {}, score: {}, match: {} , league: {}",
-                            score[0], score[1], goals_total, minutes.to_string().black().on_color("#C0E0DE"), match_score.to_string().black().on_color("#F5E663"), soccer_match_value["vsTeams"].as_str().unwrap().white().on_color("#9C3848"), match_league
+                    if match_score >= 9.0  && goals_total > 1{
+                        println!(
+                            "result: {}-{}, total goals: {}, minutes: {}, score: {:5}, match: {} , league: {}",
+                            score[0], score[1], goals_total, minutes.to_string().black().on_truecolor(192, 224, 222), match_score.to_string().black().on_truecolor(245, 230, 99), soccer_match_value["vsTeams"].as_str().unwrap().white().on_truecolor(156, 56, 72), match_league
                         );
                     }
                 }
