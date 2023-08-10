@@ -1,0 +1,6 @@
+version: '3'
+services:
+  bet365-notificator:
+    build: .
+    ports:
+      - "3003:3003"
