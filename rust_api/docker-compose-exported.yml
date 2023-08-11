@@ -1,0 +1,18 @@
+name: rust_api
+services:
+  bet365-notificator:
+    build:
+      context: /mnt/aljaz/projects/bet365/rust_api
+      dockerfile: Dockerfile
+    container_name: bet-365-notificator
+    image: bet365-notificator
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 3003
+      published: "3003"
+      protocol: tcp
+networks:
+  default:
+    name: rust_api_default
