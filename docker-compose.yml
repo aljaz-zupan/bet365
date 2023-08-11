@@ -6,3 +6,5 @@ services:
       - "3003:3003"
     image: bet365-notificator
     container_name: bet-365-notificator
+    env_file:
+      - stack.env
