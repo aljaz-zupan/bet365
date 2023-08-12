@@ -37,6 +37,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .expect("DISCORD_CHANNEL_ID must be set.")
         .parse()
         .unwrap();
+    let url = std::env::var("URL").expect("URL must be set.");
 
     let framework = StandardFramework::new().configure(|c| c.prefix("~")); // set the bot's prefix to "~"
 
@@ -53,7 +54,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let fetch_task = tokio::spawn(async move {
         loop {
             println!("\n{}", chrono::Local::now());
-            match fetch_json(&http).await {
+            match fetch_json(&http, &url).await {
                 Ok(Some(msg)) => {
                     /* let user_id = UserId(282566557710680065); // Modify this to the  user ID you want to send the message to */
                     let channel_id = ChannelId(channel_id);
@@ -83,8 +84,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-async fn fetch_json(_http: &Arc<Http>) -> Result<Option<String>, Error> {
-    let url: &str = "http://106.52.68.20/b365/soccer/test/allEv?lang=en";
+async fn fetch_json(_http: &Arc<Http>, url: &String) -> Result<Option<String>, Error> {
+    /*let url: &str = "http://106.52.68.20/b365/soccer/test/allEv?lang=en"; */
 
     let response_result: Result<Response, Error> = reqwest::get(url).await;
 
