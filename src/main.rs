@@ -33,11 +33,10 @@ struct Match {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
     let token = std::env::var("DISCORD_BOT_API_TOKEN").expect("DISCORD_BOT_API_TOKEN must be set.");
-    /* let match_score: f32 = std::env::var("MATCH_SCORE").unwrap()
-    .parse() {
-        Ok(num) => num,
-        Err(_) => 9.0
-    }  */
+    let channel_id: u64 = std::env::var("DISCORD_CHANNEL_ID")
+        .expect("DISCORD_CHANNEL_ID must be set.")
+        .parse()
+        .unwrap();
 
     let framework = StandardFramework::new().configure(|c| c.prefix("~")); // set the bot's prefix to "~"
 
@@ -57,7 +56,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             match fetch_json(&http).await {
                 Ok(Some(msg)) => {
                     /* let user_id = UserId(282566557710680065); // Modify this to the  user ID you want to send the message to */
-                    let channel_id = ChannelId(1067562408622694492);
+                    let channel_id = ChannelId(channel_id);
 
                     if let Ok(Channel::Guild(channel)) = channel_id.to_channel(&http).await {
                         /* let _ = channel.say(&http, msg).await; */
