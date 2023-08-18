@@ -1,7 +1,9 @@
 version: '3'
 services:
   bet365-notificator:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "3003:3003"
     image: bet365-notificator
