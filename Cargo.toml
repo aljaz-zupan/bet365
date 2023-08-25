@@ -1,5 +1,5 @@
 [package]
-name = "bet365-notificator"
+name = "bet365"
 version = "1.0.0"
 edition = "2021"
 authors = ["Aljaž Zupan <aljaz.zupan@gmail.com>"]

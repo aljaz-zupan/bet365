@@ -1,16 +1,13 @@
-/* use chrono::Local; */
 mod discord_bot;
 use crate::discord_bot::GatewayIntents;
 use discord_bot::{Client, Handler};
 use dotenv::dotenv;
 use reqwest::{Error, Response, StatusCode};
 use serde::{Deserialize, Serialize};
-/* use serenity::futures::future::ok; */
 use serenity::framework::StandardFramework;
 use serenity::http::Http;
 use serenity::model::prelude::{Channel, ChannelId};
 use std::sync::Arc;
-
 use std::time::Duration;
 use tokio::time;
 
