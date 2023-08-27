@@ -50,7 +50,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Launch a new asynchronous task for fetching JSON.
     let fetch_task = tokio::spawn(async move {
         loop {
-            println!("\n{}", chrono::Local::now());
+            /* println!("\n{}", chrono::Local::now()); */
             match fetch_json(&http, &url).await {
                 Ok(Some(msg)) => {
                     /* let user_id = UserId(282566557710680065); // Modify this to the  user ID you want to send the message to */
