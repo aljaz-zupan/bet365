@@ -113,7 +113,11 @@ async fn fetch_json(_http: &Arc<Http>, url: &String) -> Result<Option<String>, E
                     let num_goals1: i32 = match score[0].to_string().parse() {
                         Ok(num) => num,
                         Err(_) => {
-                            println!("Error: Could not parse {} as integer; {}", score[0]), chrono::Local::now();
+                            println!(
+                                "Error: Could not parse {} as integer; {}",
+                                score[0],
+                                chrono::Local::now()
+                            );
                             continue;
                         }
                     };
@@ -121,7 +125,11 @@ async fn fetch_json(_http: &Arc<Http>, url: &String) -> Result<Option<String>, E
                     let num_goals2: i32 = match score[1].to_string().parse() {
                         Ok(num) => num,
                         Err(_) => {
-                            println!("Error: Could not parse {} as integer; {}", score[1], chrono::Local::now());
+                            println!(
+                                "Error: Could not parse {} as integer; {}",
+                                score[1],
+                                chrono::Local::now()
+                            );
                             continue;
                         }
                     };
