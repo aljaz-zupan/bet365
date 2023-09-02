@@ -4,8 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "3003:3003"
     environment:
       DISCORD_BOT_API_TOKEN: ${DISCORD_BOT_API_TOKEN}
       DISCORD_CHANNEL_ID: ${DISCORD_CHANNEL_ID}
