@@ -59,12 +59,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     if let Ok(Channel::Guild(channel)) = channel_id.to_channel(&http).await {
                         /* let _ = channel.say(&http, msg).await; */
                         if let Err(e) = channel.say(&http, msg).await {
-                            eprintln!("Error sending message: {:?}", e);
+                            println!("Error sending message: {:?}; {}", e, chrono::Local::now());
                         }
                     }
                 }
                 Ok(None) => {}
-                Err(e) => eprintln!("Error fetching JSON: {}", e),
+                Err(e) => println!("Error fetching JSON: {}; {}", e, chrono::Local::now()),
             }
             time::sleep(Duration::from_secs(120)).await; // Wait for 1 minute
         }
@@ -113,7 +113,7 @@ async fn fetch_json(_http: &Arc<Http>, url: &String) -> Result<Option<String>, E
                     let num_goals1: i32 = match score[0].to_string().parse() {
                         Ok(num) => num,
                         Err(_) => {
-                            eprintln!("Error: Could not parse {} as integer", score[0]);
+                            println!("Error: Could not parse {} as integer; {}", score[0]), chrono::Local::now();
                             continue;
                         }
                     };
@@ -121,7 +121,7 @@ async fn fetch_json(_http: &Arc<Http>, url: &String) -> Result<Option<String>, E
                     let num_goals2: i32 = match score[1].to_string().parse() {
                         Ok(num) => num,
                         Err(_) => {
-                            eprintln!("Error: Could not parse {} as integer", score[1]);
+                            println!("Error: Could not parse {} as integer; {}", score[1], chrono::Local::now());
                             continue;
                         }
                     };
@@ -143,10 +143,14 @@ async fn fetch_json(_http: &Arc<Http>, url: &String) -> Result<Option<String>, E
                 return Ok(Some(msg));
             }
         } else {
-            println!("There was an oppsie: {}", response.status());
+            println!(
+                "There was an oppsie: {}; {}",
+                response.status(),
+                chrono::Local::now()
+            );
         }
     } else if let Err(err) = response_result {
-        println!("Err: {}", err);
+        println!("Err: {}; {}", err, chrono::Local::now());
     }
 
     Ok(None)
