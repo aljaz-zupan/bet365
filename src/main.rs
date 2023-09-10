@@ -95,7 +95,9 @@ async fn fetch_json(_http: &Arc<Http>, url: &String) -> Result<Option<String>, E
                 let match_league = soccer_match_value["league"].as_str().unwrap();
                 let match_period = soccer_match_value["period"].as_str().unwrap();
 
-                if !match_league.to_lowercase().contains("esoccer") {
+                if !match_league.to_lowercase().contains("esoccer")
+                    && !match_league.to_lowercase().contains("beach")
+                {
                     let score: Vec<&str> = soccer_match_value["score"]
                         .as_str()
                         .unwrap()
