@@ -1,6 +1,6 @@
 FROM rust:1.72-alpine
 # Copy source code
-WORKDIR /app
+WORKDIR /bet365
 COPY . .
 # Build the application
 RUN cargo build --release
