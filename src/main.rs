@@ -59,12 +59,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     if let Ok(Channel::Guild(channel)) = channel_id.to_channel(&http).await {
                         /* let _ = channel.say(&http, msg).await; */
                         if let Err(e) = channel.say(&http, msg).await {
-                            println!("Error sending message: {:?}; {}", e, chrono::Local::now());
+                            eprintln!("Error sending message: {:?}; {}", e, chrono::Local::now());
                         }
                     }
                 }
                 Ok(None) => {}
-                Err(e) => println!("Error fetching JSON: {}; {}", e, chrono::Local::now()),
+                Err(e) => eprintln!("Error fetching JSON: {}; {}", e, chrono::Local::now()),
             }
             time::sleep(Duration::from_secs(120)).await; // Wait for 1 minute
         }
@@ -72,7 +72,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Start the client (this blocks the current thread until the client is shut down).
     if let Err(why) = client.start().await {
-        println!("Client error: {:?}", why);
+        eprintln!("Client error: {:?}", why);
     }
 
     // We must wait on our fetch task before ending the program, otherwise it may be cancelled prematurely.
@@ -115,7 +115,7 @@ async fn fetch_json(_http: &Arc<Http>, url: &String) -> Result<Option<String>, E
                     let num_goals1: i32 = match score[0].to_string().parse() {
                         Ok(num) => num,
                         Err(_) => {
-                            println!(
+                            eprintln!(
                                 "Error: Could not parse {} as integer; {}",
                                 score[0],
                                 chrono::Local::now()
@@ -127,7 +127,7 @@ async fn fetch_json(_http: &Arc<Http>, url: &String) -> Result<Option<String>, E
                     let num_goals2: i32 = match score[1].to_string().parse() {
                         Ok(num) => num,
                         Err(_) => {
-                            println!(
+                            eprintln!(
                                 "Error: Could not parse {} as integer; {}",
                                 score[1],
                                 chrono::Local::now()
@@ -141,7 +141,7 @@ async fn fetch_json(_http: &Arc<Http>, url: &String) -> Result<Option<String>, E
                     if match_score >= 9.0 && match_period == "SecondHalf" {
                         let msg = format!(
                             "result: {}-{}, total goals: {}, minutes: {}, score: **{:5}**, match: __{}__ , league: {}",
-                            score[0], score[1], goals_total, minutes.to_string(), match_score.to_string(), soccer_match_value["vsTeams"].as_str().unwrap(), match_league
+                            score[0], score[1], goals_total, minutes, match_score.to_string(), soccer_match_value["vsTeams"].as_str().unwrap(), match_league
                         );
                         messages.push(msg);
                     }
@@ -153,14 +153,14 @@ async fn fetch_json(_http: &Arc<Http>, url: &String) -> Result<Option<String>, E
                 return Ok(Some(msg));
             }
         } else {
-            println!(
-                "There was an oppsie: {}; {}",
+            eprintln!(
+                "There was an opsie: {}; {}",
                 response.status(),
                 chrono::Local::now()
             );
         }
     } else if let Err(err) = response_result {
-        println!("Err: {}; {}", err, chrono::Local::now());
+        eprintln!("Err: {}; {}", err, chrono::Local::now());
     }
 
     Ok(None)
