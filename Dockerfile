@@ -1,4 +1,4 @@
-FROM rust:1.72-alpine
+FROM rust:1.72
 # Copy source code
 WORKDIR /bet365
 COPY . .
